@@ -10,7 +10,7 @@ box_code=pk_lexers:BoxCodeLexer
 
 setup(
     name='pk-lexers',
-    version='0.1.1',
+    version='0.1.2',
     author='Kvist',
     packages=find_packages(),
     entry_points=entry_points,
