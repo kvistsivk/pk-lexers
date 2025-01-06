@@ -8,7 +8,7 @@ class BoxCodeLexer(RegexLexer):
     aliases = ['box_code']
     filenames = []
 
-    box_name = r'(Box\s+\d+:)(\s+)'
+    box_name = r'(Box\s+\d+:\s+)'
     box_str = r'([0-9A-F]{2})( )([0-9A-F]{2})( )([0-9A-F]{2})( )([0-9A-F]{2})'
     box_line = "{}{}".format(box_name, box_str)
 
@@ -16,14 +16,14 @@ class BoxCodeLexer(RegexLexer):
         'root': [
             include('whitespace'),
             (box_line,
-             bygroups(Name.Constant, Text, Keyword, Text, String.Other, Text, Keyword, Text, String.Other),
+             bygroups(Text, Keyword, Text, String, Text, Keyword, Text, String.Other),
              'even_line'),
         ],
 
         'even_line': [
             include('whitespace'),
             (box_line,
-             bygroups(Name.Constant, Text, String.Other, Text, Keyword, Text, String.Other, Text, Keyword),
+             bygroups(Text, String, Text, Keyword, Text, String.Other, Text, Keyword),
              '#pop'),
         ],
 
