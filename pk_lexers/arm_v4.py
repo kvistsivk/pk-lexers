@@ -1,38 +1,38 @@
 from pygments.lexer import RegexLexer, include
 from pygments.token import *
 
-__all__ = ("Gen3AceLexer")
+__all__ = ('ArmV4Lexer')
 
-class Gen3AceLexer(RegexLexer):
-    name = 'Gen 3 ACE'
-    aliases = ['gen3ace']
-    filenames = ['*.asm']
+class ArmV4Lexer(RegexLexer):
+    name = 'ARMv4'
+    aliases = ['arm_v4']
+    filenames = []
 
-    register = '(?:{})'.format('|'.join([
+    register = "(?:{})".format('|'.join([
         'r0', 'r1(?:0|1|2|3|4|5)?', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7', 'r8',
         'r9', 'r10', 'r11', 'r12', 'r13', 'r14', 'r15', 'sb', 'sl', 'fp', 'ip',
         'sp', 'lr', 'pc',
     ]))
 
-    cond = '(?:{})'.format('|'.join([
+    cond = "(?:{})".format('|'.join([
         'AL', 'CC', 'CS', 'EQ', 'GE', 'GT', 'HI', 'HS', 'LE', 'LO', 'LS', 'LT',
         'MI', 'NE', 'PL', 'VC', 'VS',
     ]))
 
-    op_c = '(?:{}){}?'.format('|'.join([
+    op_c = "(?:{}){}?".format('|'.join([
         'B(?:L|X)?', 'CMN', 'CMP', 'LDR(?:B|H|SB|SH)?', 'POP', 'PUSH',
         'STR(?:B|H)?', 'TEQ', 'TST',
     ]), cond)
 
-    op_sc = '(?:{})S?{}?'.format('|'.join([
+    op_sc = "(?:{})S?{}?".format('|'.join([
         'ADC', 'ADD', 'AND', 'ASR', 'BIC', 'EOR', 'LSL', 'LSR', 'MLA', 'MOV',
         'MUL', 'MVN', 'ORR', 'ROR', 'RRX', 'RSB', 'RSC', 'SBC', 'SMLAL',
         'SMULL', 'SUB', 'UMLAL', 'UMULL',
     ]), cond)
 
-    op_ac = '(?:LDM|STM)(?:IA|IB|DA|DB)?{}?'.format(cond)
+    op_ac = "(?:LDM|STM)(?:IA|IB|DA|DB)?{}?".format(cond)
 
-    instruction = '(?:{})'.format('|'.join([op_c, op_sc, op_ac, 'NOP']))
+    instruction = "(?:{})".format('|'.join([op_c, op_sc, op_ac, 'NOP']))
 
     tokens = {
         'root': [

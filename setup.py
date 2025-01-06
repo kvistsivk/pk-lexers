@@ -4,7 +4,8 @@ from setuptools import setup, find_packages
 
 entry_points = '''
 [pygments.lexers]
-gen3ace=pk_lexers:Gen3AceLexer
+arm_v4=pk_lexers:ArmV4Lexer
+box_code=pk_lexers:BoxCodeLexer
 '''
 
 setup(
