@@ -16,14 +16,14 @@ class BoxCodeLexer(RegexLexer):
         'root': [
             include('whitespace'),
             (box_line,
-             bygroups(Text, Keyword, Text, String, Text, Keyword, Text, String.Other),
+             bygroups(Text, Keyword, Text, String, Text, Keyword, Text, String),
              'even_line'),
         ],
 
         'even_line': [
             include('whitespace'),
             (box_line,
-             bygroups(Text, String, Text, Keyword, Text, String.Other, Text, Keyword),
+             bygroups(Text, String, Text, Keyword, Text, String, Text, Keyword),
              '#pop'),
         ],
 
