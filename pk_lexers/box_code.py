@@ -8,28 +8,24 @@ class BoxCodeLexer(RegexLexer):
     aliases = ['box_code']
     filenames = []
 
-    box_name = r'(Box\s+\d+:\s+)'
+    box_name = r'(Box\s+\d+:\s+)([0-9A-F]{2}(?: [0-9A-F]{2}){3})'
     box_str = r'([0-9A-F]{2})( )([0-9A-F]{2})( )([0-9A-F]{2})( )([0-9A-F]{2})'
     box_line = "{}{}".format(box_name, box_str)
 
     tokens = {
         'root': [
             include('whitespace'),
-            (box_line,
-             bygroups(Text, Keyword, Text, String, Text, Keyword, Text, String),
-             'even_line'),
+            (box_name, bygroups(Name, Keyword), "even_line"),
         ],
 
         'even_line': [
             include('whitespace'),
-            (box_line,
-             bygroups(Text, String, Text, Keyword, Text, String, Text, Keyword),
-             '#pop'),
+            (box_name, bygroups(Name, String), '#pop'),
         ],
 
         'whitespace': [
             (r'\n', Text),
             (r'\s+', Text),
-            (r'#.*?\n', Comment),
+            (r';.*?\n', Comment),
         ],
     }

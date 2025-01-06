@@ -38,7 +38,7 @@ class ArmV4Lexer(RegexLexer):
         'root': [
             include('whitespace'),
 
-            (r'[0-9A-Z]{2}(?: [0-9A-Z]{2}){3}', String),
+            (r'[0-9A-Z]{2}(?: [0-9A-Z]{2}){1,3}', String),
             (register, Keyword),
             (instruction, Name.Constant),
             (r'#0x[0-9A-F]+', Number.Hex),
