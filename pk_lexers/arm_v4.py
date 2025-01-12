@@ -43,7 +43,7 @@ class ArmV4Lexer(RegexLexer):
             (instruction, Name.Constant),
             (r'#0x[0-9A-F]+', Number.Hex),
             (r'#0b[01]+', Number.Bin),
-            (r'#\d+', Number.Integer),
+            (r'#-?\d+', Number.Integer),
             (r'[-*,.():]+', Punctuation)
         ],
 
