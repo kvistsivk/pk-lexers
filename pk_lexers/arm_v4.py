@@ -1,4 +1,4 @@
-from pygments.lexer import RegexLexer, include
+from pygments.lexer import RegexLexer, bygroups, include
 from pygments.token import *
 
 __all__ = ('ArmV4Lexer')
@@ -36,6 +36,10 @@ class ArmV4Lexer(RegexLexer):
 
     hex_byte = '[0-9A-F]{2}'
     var_byte = '[a-z]{2}'
+    hh_word = '({})( )({})'.format(hex_byte, hex_byte)
+    hv_word = '({})( )({})'.format(hex_byte, var_byte)
+    vh_word = '({})( )({})'.format(var_byte, hex_byte)
+    vv_word = '({})( )({})'.format(var_byte, var_byte)
 
     tokens = {
         'root': [
@@ -44,12 +48,15 @@ class ArmV4Lexer(RegexLexer):
             (r';.*?\n', Comment),
             (r'[-*,.(){}:\[\]!]+', Punctuation),
 
+            (hh_word, bygroups(Generic, Text, Generic)),
+            (hv_word, bygroups(Generic, Text, Generic.Emph)),
+            (vh_word, bygroups(Generic.Emph, Text, Generic)),
+            (vv_word, bygroups(Generic.Emph, Text, Generic.Emph)),
+
             (instruction, Operator.Word),
             (register, Name.Variable.Global),
             (r'#-?\d+', Number.Integer),
             (r'#0x[0-9A-F]+', Number.Hex),
             (r'#0b[01]+', Number.Bin),
-            (r'[0-9A-F]{2}', Generic),
-            (r'([a-z])\1', Generic.Emph),
         ],
     }
