@@ -9,9 +9,9 @@ class ArmV4Lexer(RegexLexer):
     filenames = []
 
     register = "(?:{})".format('|'.join([
-        'r0', 'r1(?:0|1|2|3|4|5)?', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7', 'r8',
-        'r9', 'r10', 'r11', 'r12', 'r13', 'r14', 'r15', 'sb', 'sl', 'fp', 'ip',
-        'sp', 'lr', 'pc',
+        'r0', 'r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7', 'r8', 'r9', 'r10',
+        'r11', 'r12', 'r13', 'r14', 'r15', 'sb', 'sl', 'fp', 'ip', 'sp', 'lr',
+        'pc',
     ]))
 
     cond = "(?:{})".format('|'.join([
@@ -34,26 +34,22 @@ class ArmV4Lexer(RegexLexer):
 
     instruction = "(?:{})".format('|'.join([op_c, op_sc, op_ac, 'NOP']))
 
+    hex_byte = '[0-9A-F]{2}'
+    var_byte = '[a-z]{2}'
+
     tokens = {
         'root': [
-            include('whitespace'),
-
-            (r'[0-9A-Z]{2}(?: [0-9A-Z]{2}){1,3}', String),
-            (register, Keyword),
-            (instruction, Name.Constant),
-            (r'#0x[0-9A-F]+', Number.Hex),
-            (r'#0b[01]+', Number.Bin),
-            (r'#-?\d+', Number.Integer),
-            (r'[-*,.():]+', Punctuation)
-        ],
-
-        'whitespace': [
             (r'\n', Text),
             (r'\s+', Text),
             (r';.*?\n', Comment),
-        ],
+            (r'[-*,.(){}:\[\]!]+', Punctuation),
 
-        'punctuation': [
-            (r'[-*,.():!\[\]]+', Punctuation)
-        ]
+            (instruction, Operator.Word),
+            (register, Name.Variable.Global),
+            (r'#-?\d+', Number.Integer),
+            (r'#0x[0-9A-F]+', Number.Hex),
+            (r'#0b[01]+', Number.Bin),
+            (r'[0-9A-F]{2}', Generic),
+            (r'([a-z])\1', Generic.Emph),
+        ],
     }
