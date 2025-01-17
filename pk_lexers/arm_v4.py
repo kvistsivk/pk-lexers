@@ -9,9 +9,8 @@ class ArmV4Lexer(RegexLexer):
     filenames = []
 
     register = "(?:{})".format('|'.join([
-        'r0', 'r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7', 'r8', 'r9', 'r10',
-        'r11', 'r12', 'r13', 'r14', 'r15', 'sb', 'sl', 'fp', 'ip', 'sp', 'lr',
-        'pc',
+        'r0', 'r1(?:0|1|2|3|4|5)?', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7', 'r8',
+        'r9', 'sb', 'sl', 'fp', 'ip', 'sp', 'lr', 'pc',
     ]))
 
     cond = "(?:{})".format('|'.join([
