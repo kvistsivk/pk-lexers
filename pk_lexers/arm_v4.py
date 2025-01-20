@@ -9,8 +9,8 @@ class ArmV4Lexer(RegexLexer):
     filenames = []
 
     register = "(?:{})".format('|'.join([
-        'r0', 'r1(?:0|1|2|3|4|5)?', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7', 'r8',
-        'r9', 'sb', 'sl', 'fp', 'ip', 'sp', 'lr', 'pc',
+        '[cs]psr(?:_f?s?x?c?)?', 'r0', 'r1(?:0|1|2|3|4|5)?', 'r2', 'r3', 'r4',
+        'r5', 'r6', 'r7', 'r8', 'r9', 'sb', 'sl', 'fp', 'ip', 'sp', 'lr', 'pc',
     ]))
 
     cond = "(?:{})".format('|'.join([
@@ -19,8 +19,8 @@ class ArmV4Lexer(RegexLexer):
     ]))
 
     op_c = "(?:{}){}?".format('|'.join([
-        'B(?:L|X)?', 'CMN', 'CMP', 'LDR(?:B|H|SB|SH)?', 'POP', 'PUSH',
-        'STR(?:B|H)?', 'TEQ', 'TST',
+        'B(?:L|X)?', 'CMN', 'CMP', 'LDR(?:B|H|SB|SH)?', 'MRS', 'MSR', 'POP',
+        'PUSH', 'STR(?:B|H)?', 'TEQ', 'TST',
     ]), cond)
 
     op_sc = "(?:{})S?{}?".format('|'.join([
