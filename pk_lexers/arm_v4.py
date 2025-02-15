@@ -15,7 +15,7 @@ class ArmV4Lexer(RegexLexer):
 
     cond = "(?:{})".format('|'.join([
         'AL', 'CC', 'CS', 'EQ', 'GE', 'GT', 'HI', 'HS', 'LE', 'LO', 'LS', 'LT',
-        'MI', 'NE', 'PL', 'VC', 'VS',
+        'MI', 'NE', 'NV', 'PL', 'VC', 'VS',
     ]))
 
     op_c = "(?:{}){}?".format('|'.join([
