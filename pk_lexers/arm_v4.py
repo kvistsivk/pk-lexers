@@ -54,6 +54,7 @@ class ArmV4Lexer(RegexLexer):
 
             (instruction, Operator.Word),
             (register, Name.Variable.Global),
+            (r'[a-z][0-9A-Za-z_]+', Name.Label),
             (r'#0x[0-9A-F]+', Number.Hex),
             (r'#0b[01]+', Number.Bin),
             (r'#-?\d+', Number.Integer),
