@@ -33,6 +33,13 @@ class ArmV4Lexer(RegexLexer):
 
     instruction = "(?:{})".format('|'.join([op_c, op_sc, op_ac, 'NOP']))
 
+    directive = "(?:{})".format('|'.join([
+        'ascii',
+        'byte',
+        'hword',
+        'word',
+    ]))
+
     hex_byte = '[0-9A-F]{2}'
     var_byte = '[a-z]{2}'
     hh_word = '({})( )({})'.format(hex_byte, hex_byte)
@@ -45,7 +52,7 @@ class ArmV4Lexer(RegexLexer):
             (r'\n', Text),
             (r'\s+', Text),
             (r';.*?\n', Comment),
-            (r'[-*,.(){}:\[\]!]+', Punctuation),
+            (r'[-*.,(){}:\[\]!]+', Punctuation),
 
             (hh_word, bygroups(Generic, Text, Generic)),
             (hv_word, bygroups(Generic, Text, Generic.Emph)),
@@ -53,10 +60,11 @@ class ArmV4Lexer(RegexLexer):
             (vv_word, bygroups(Generic.Emph, Text, Generic.Emph)),
 
             (instruction, Operator.Word),
+            (directive, Operator.Word),
             (register, Name.Variable.Global),
+            (r'0x[0-9A-F]+', Number.Hex),
+            (r'0b[01]+', Number.Bin),
+            (r'-?\d+', Number.Integer),
             (r'[a-z][0-9A-Za-z_]+', Name.Label),
-            (r'#0x[0-9A-F]+', Number.Hex),
-            (r'#0b[01]+', Number.Bin),
-            (r'#-?\d+', Number.Integer),
         ],
     }
