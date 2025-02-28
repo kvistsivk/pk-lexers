@@ -31,7 +31,14 @@ class ArmV4Lexer(RegexLexer):
 
     op_ac = "(?:LDM|STM)(?:IA|IB|DA|DB)?{}?".format(cond)
 
-    instruction = "(?:{})".format('|'.join([op_c, op_sc, op_ac, 'ADR', 'NOP']))
+    instruction = "(?:{})".format('|'.join([
+        op_c,
+        op_sc,
+        op_ac,
+        'ADR',
+        'CPY',
+        'NOP',
+    ]))
 
     directive = "(?:{})".format('|'.join([
         'ascii',
