@@ -38,14 +38,14 @@ class ArmV4Lexer(RegexLexer):
         'ADR',
         'CPY',
         'NOP',
+        'DCB',
+        'DCW',
+        'DCD',
+        'DCQ',
+        'DCI',
     ]))
 
-    directive = "(?:{})".format('|'.join([
-        'ascii',
-        'byte',
-        'hword',
-        'word',
-    ]))
+    string = r'"[^"]*?"'
 
     hex_byte = '[0-9A-F]{2}'
     var_byte = '[a-z]{2}'
@@ -67,8 +67,8 @@ class ArmV4Lexer(RegexLexer):
             (vv_word, bygroups(Generic.Emph, Text, Generic.Emph)),
 
             (instruction, Operator.Word),
-            (directive, Operator.Word),
             (register, Name.Variable.Global),
+            (string, String),
             (r'0x[0-9A-F]+', Number.Hex),
             (r'0b[01]+', Number.Bin),
             (r'-?\d+', Number.Integer),
