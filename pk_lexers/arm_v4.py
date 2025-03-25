@@ -58,8 +58,8 @@ class ArmV4Lexer(RegexLexer):
         'root': [
             (r'\n', Text),
             (r'\s+', Text),
-            (r';.*?\n', Comment),
-            (r'[-*.,(){}:\[\]!]+', Punctuation),
+            (r'@.*?\n', Comment),
+            (r'[-*.,(){}:;\[\]!]+', Punctuation),
 
             (hh_word, bygroups(Generic, Text, Generic)),
             (hv_word, bygroups(Generic, Text, Generic.Emph)),
