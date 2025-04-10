@@ -8,45 +8,6 @@ class ArmV4Lexer(RegexLexer):
     aliases = ['arm_v4']
     filenames = []
 
-    register = "(?:{})".format('|'.join([
-        '[cs]psr(?:_f?s?x?c?)?', 'r0', 'r1(?:0|1|2|3|4|5)?', 'r2', 'r3', 'r4',
-        'r5', 'r6', 'r7', 'r8', 'r9', 'sb', 'sl', 'fp', 'ip', 'sp', 'lr', 'pc',
-    ]))
-
-    cond = "(?:{})".format('|'.join([
-        'AL', 'CC', 'CS', 'EQ', 'GE', 'GT', 'HI', 'HS', 'LE', 'LO', 'LS', 'LT',
-        'MI', 'NE', 'NV', 'PL', 'VC', 'VS',
-    ]))
-
-    op_c = "(?:{}){}?".format('|'.join([
-        'B(?:L|X)?', 'CMN', 'CMP', 'LDR(?:B|H|SB|SH)?', 'MRS', 'MSR', 'POP',
-        'PUSH', 'STR(?:B|H)?', 'TEQ', 'TST',
-    ]), cond)
-
-    op_sc = "(?:{})S?{}?".format('|'.join([
-        'ADC', 'ADD', 'AND', 'ASR', 'BIC', 'EOR', 'LSL', 'LSR', 'MLA', 'MOV',
-        'MUL', 'MVN', 'ORR', 'ROR', 'RRX', 'RSB', 'RSC', 'SBC', 'SMLAL',
-        'SMULL', 'SUB', 'UMLAL', 'UMULL',
-    ]), cond)
-
-    op_ac = "(?:LDM|STM)(?:IA|IB|DA|DB)?{}?".format(cond)
-
-    instruction = "(?:{})".format('|'.join([
-        op_c,
-        op_sc,
-        op_ac,
-        'ADR',
-        'CPY',
-        'NOP',
-        'DCB',
-        'DCW',
-        'DCD',
-        'DCQ',
-        'DCI',
-    ]))
-
-    string = r'"[^"]*?"'
-
     hex_byte = '[0-9A-F]{2}'
     var_byte = '[a-z]{2}'
     hh_word = '({})( )({})'.format(hex_byte, hex_byte)
@@ -54,24 +15,86 @@ class ArmV4Lexer(RegexLexer):
     vh_word = '({})( )({})'.format(var_byte, hex_byte)
     vv_word = '({})( )({})'.format(var_byte, var_byte)
 
+    cond = r'CC|CS|EQ|GE|GT|HI|HS|LE|LO|LS|LT|MI|NE|NV|PL|VC|VS'
+
+    op6 = r'SMLALS|SMULLS|UMLALS|UMULLS'
+    op5 = r'LDMDA|LDMDB|LDMIA|LDMIB|LDRSB|LDRSH|SMLAL|SMULL|STMDA|STMDB|STMIA|STMIB|UMLAL|UMULL'
+    op4 = (
+        r'ADCS|ADDS|ANDS|ASRS|BICS|EORS|LDRB|LDRH|LSLS|LSRS|MLAS|MOVS|MULS|MVNS|ORRS|PUSH|RORS|'
+        r'RRXS|RSBS|RSCS|SBCS|STRB|STRH|SUBS'
+    )
+
+    op3 = (
+        r'ADC|ADD|AND|ASR|BIC|BLX|CMN|CMP|EOR|LDM|LDR|LSL|LSR|MLA|MOV|MRS|MSR|MUL|MVN|ORR|POP|ROR|'
+        r'RRX|RSB|RSC|SBC|STM|STR|SUB|TEQ|TST'
+    )
+
+    op2 = r'BL|BX'
+    op1 = r'B'
+
+    op6_cond = "(?:{})(?:{})".format(op6, cond)
+    op5_cond = "(?:{})(?:{})".format(op5, cond)
+    op4_cond = "(?:{})(?:{})".format(op4, cond)
+    op3_cond = "(?:{})(?:{})".format(op3, cond)
+    op2_cond = "(?:{})(?:{})".format(op2, cond)
+    op1_cond = "(?:{})(?:{})".format(op1, cond)
+
+    op_bare = r'ADR|CPY|DCB|DCD|DCI|DCQ|DCW|NOP'
+    directive = r'\.(?:ascii|byte|hword|req|word)'
+
+    register = r'(?:{})(?!\w)'.format('|'.join([
+        '[cs]psr(?:_fs?x?c?|_sx?c?|_xc?|_c)?',
+        'r1[0-5]', 'r[0-9]',
+        'fp',
+        'ip',
+        'lr',
+        'pc',
+        'sb',
+        'sl',
+        'sp',
+    ]))
+
+    string = r'"[^"]*?"'
+    bin_num = r'0b[01]+'
+    oct_num = r'0o[0-7]+'
+    dec_num = r'[0-9]+'
+    hex_num = r'0x[0-9a-fA-F]+'
+    label = r'[A-Za-z_][0-9A-Za-z_.]+'
+
     tokens = {
         'root': [
-            (r'\n', Text),
-            (r'\s+', Text),
-            (r'@.*?\n', Comment),
-            (r'[-*.,(){}:;\[\]!]+', Punctuation),
-
             (hh_word, bygroups(Generic, Text, Generic)),
             (hv_word, bygroups(Generic, Text, Generic.Emph)),
             (vh_word, bygroups(Generic.Emph, Text, Generic)),
             (vv_word, bygroups(Generic.Emph, Text, Generic.Emph)),
 
-            (instruction, Operator.Word),
+            (op6_cond, Operator.Word),
+            (op5_cond, Operator.Word),
+            (op6, Operator.Word),
+            (op4_cond, Operator.Word),
+            (op5, Operator.Word),
+            (op3_cond, Operator.Word),
+            (op4, Operator.Word),
+            (op2_cond, Operator.Word),
+            (op3, Operator.Word),
+            (op1_cond, Operator.Word),
+            (op2, Operator.Word),
+            (op1, Operator.Word),
+            (op_bare, Operator.Word),
+            (directive, Operator.Word),
+
             (register, Name.Variable.Global),
             (string, String),
-            (r'0x[0-9A-F]+', Number.Hex),
-            (r'0b[01]+', Number.Bin),
-            (r'-?\d+', Number.Integer),
-            (r'[a-z_][0-9A-Za-z_.]+', Name.Label),
+            (bin_num, Number.Bin),
+            (oct_num, Number.Oct),
+            (dec_num, Number.Integer),
+            (hex_num, Number.Hex),
+            (label, Name.Label),
+
+            (r'\n', Text),
+            (r'\s+', Text),
+            (r'@.*?\n', Comment),
+            (r'[-*.,(){}:;\[\]!]+', Punctuation),
         ],
     }
+
