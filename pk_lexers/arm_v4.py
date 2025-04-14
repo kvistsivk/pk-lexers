@@ -87,8 +87,8 @@ class ArmV4Lexer(RegexLexer):
             (string, String),
             (bin_num, Number.Bin),
             (oct_num, Number.Oct),
-            (dec_num, Number.Integer),
             (hex_num, Number.Hex),
+            (dec_num, Number.Integer),
             (label, Name.Label),
 
             (r'\n', Text),
