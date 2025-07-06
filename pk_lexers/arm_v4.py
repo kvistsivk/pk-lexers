@@ -42,7 +42,7 @@ class ArmV4Lexer(RegexLexer):
     op_bare = r'ADR|CPY|DCB|DCD|DCI|DCQ|DCW|NOP'
     directive = r'\.(?:ascii|byte|hword|req|word)'
 
-    register = r'(?:{})(?!\w)'.format('|'.join([
+    register = r'(?:{})(?![0-9A-Za-z_./])'.format('|'.join([
         '[cs]psr(?:_fs?x?c?|_sx?c?|_xc?|_c)?',
         'r1[0-5]', 'r[0-9]',
         'fp',
@@ -59,7 +59,7 @@ class ArmV4Lexer(RegexLexer):
     oct_num = r'0o[0-7]+'
     dec_num = r'[0-9]+'
     hex_num = r'0x[0-9a-fA-F]+'
-    label = r'[A-Za-z_][0-9A-Za-z_.]+'
+    label = r'[A-Za-z_][0-9A-Za-z_./]+'
 
     tokens = {
         'root': [
