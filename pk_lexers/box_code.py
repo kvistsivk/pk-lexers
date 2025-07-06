@@ -8,7 +8,7 @@ class BoxCodeLexer(RegexLexer):
     aliases = ['box_code']
     filenames = []
 
-    box = r'(Box\s+\d+:\s+)([0-9A-F]{2}(?: [0-9A-F]{2}){3})'
+    box = r'(Box\s+\d+:\s+)([0-9A-Za-z!?]{2}(?: [0-9A-Za-z!?]{2}){3})'
 
     tokens = {
         'root': [
