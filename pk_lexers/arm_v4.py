@@ -8,12 +8,12 @@ class ArmV4Lexer(RegexLexer):
     aliases = ['arm_v4']
     filenames = []
 
-    hex_byte = '[0-9A-F]{2}'
-    var_byte = '[a-z]{2}'
-    hh_word = '({})( )({})'.format(hex_byte, hex_byte)
-    hv_word = '({})( )({})'.format(hex_byte, var_byte)
-    vh_word = '({})( )({})'.format(var_byte, hex_byte)
-    vv_word = '({})( )({})'.format(var_byte, var_byte)
+    hex_byte = r'[0-9A-F]{2}'
+    var_byte = r'[a-z]{2}'
+    hh_word = r'({})( )({})'.format(hex_byte, hex_byte)
+    hv_word = r'({})( )({})'.format(hex_byte, var_byte)
+    vh_word = r'({})( )({})'.format(var_byte, hex_byte)
+    vv_word = r'({})( )({})'.format(var_byte, var_byte)
 
     cond = r'CC|CS|EQ|GE|GT|HI|HS|LE|LO|LS|LT|MI|NE|NV|PL|VC|VS'
 
@@ -32,12 +32,12 @@ class ArmV4Lexer(RegexLexer):
     op2 = r'BL|BX'
     op1 = r'B'
 
-    op6_cond = "(?:{})(?:{})".format(op6, cond)
-    op5_cond = "(?:{})(?:{})".format(op5, cond)
-    op4_cond = "(?:{})(?:{})".format(op4, cond)
-    op3_cond = "(?:{})(?:{})".format(op3, cond)
-    op2_cond = "(?:{})(?:{})".format(op2, cond)
-    op1_cond = "(?:{})(?:{})".format(op1, cond)
+    op6_cond = r'(?:{})(?:{})'.format(op6, cond)
+    op5_cond = r'(?:{})(?:{})'.format(op5, cond)
+    op4_cond = r'(?:{})(?:{})'.format(op4, cond)
+    op3_cond = r'(?:{})(?:{})'.format(op3, cond)
+    op2_cond = r'(?:{})(?:{})'.format(op2, cond)
+    op1_cond = r'(?:{})(?:{})'.format(op1, cond)
 
     op_bare = r'ADR|CPY|DCB|DCD|DCI|DCQ|DCW|NOP'
     directive = r'\.(?:ascii|byte|hword|req|word)'
@@ -60,6 +60,7 @@ class ArmV4Lexer(RegexLexer):
     dec_num = r'[0-9]+'
     hex_num = r'0x[0-9a-fA-F]+'
     label = r'[A-Za-z_][0-9A-Za-z_./]+'
+    const = r'([#])({})'.format(label)
 
     tokens = {
         'root': [
@@ -89,6 +90,7 @@ class ArmV4Lexer(RegexLexer):
             (oct_num, Number.Oct),
             (hex_num, Number.Hex),
             (dec_num, Number.Integer),
+            (const, bygroups(Punctuation, Number.Integer)),
             (label, Name.Label),
 
             (r'\n', Text),
